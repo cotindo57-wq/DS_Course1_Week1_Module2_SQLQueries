@@ -7,10 +7,9 @@ conn = sqlite3.connect("data.sqlite")
 # Step 1
 df_boston = pd.read_sql(
     """
-    SELECT 
+    SELECT
         e.firstName,
-        e.lastName,
-        e.jobTitle
+        e.lastName
     FROM employees e
     INNER JOIN offices o
         ON e.officeCode = o.officeCode
