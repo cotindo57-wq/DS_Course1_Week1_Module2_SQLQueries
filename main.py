@@ -24,8 +24,7 @@ df_zero_emp = pd.read_sql(
     """
     SELECT 
         o.officeCode,
-        o.city,
-        o.country
+        o.city
     FROM offices o
     LEFT JOIN employees e
         ON o.officeCode = e.officeCode
@@ -140,16 +139,15 @@ df_total_customers = pd.read_sql(
 df_customers = pd.read_sql(
     """
     SELECT
-        p.productName,
-        p.productCode,
-        COUNT(DISTINCT o.customerNumber) AS numpurchasers
-    FROM products p
-    INNER JOIN orderdetails od
-        ON p.productCode = od.productCode
-    INNER JOIN orders o
-        ON od.orderNumber = o.orderNumber
-    GROUP BY p.productName, p.productCode
-    ORDER BY numpurchasers DESC
+        o.officeCode,
+        o.city,
+        COUNT(c.customerNumber) AS n_customers
+    FROM offices o
+    LEFT JOIN employees e
+        ON o.officeCode = e.officeCode
+    LEFT JOIN customers c
+        ON e.employeeNumber = c.salesRepEmployeeNumber
+    GROUP BY o.officeCode, o.city
     """,
     conn
 )
